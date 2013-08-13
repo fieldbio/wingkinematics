@@ -2,7 +2,6 @@
 from numpy import *
 from math import *
 import scipy.signal as signal
-from Numeric import *
 import os
 import getopt
 import sys
@@ -47,8 +46,8 @@ def main(file,time):
 	lines2 = inFile2.readlines()	
 
 
-    	Data= zeros(((len(lines)-1),18), Float)
-    	Filter= zeros((1,18), Float)
+    	Data= zeros(((len(lines)-1),18), float)
+    	Filter= zeros((1,18), float)
 
 
 
@@ -72,7 +71,7 @@ def main(file,time):
 	fundamental_frequency=40
 	sample_rate=1000
 
-	Output=zeros(((len(lines)-1),18), Float)
+	Output=zeros(((len(lines)-1),18), float)
 
 	for n in range(0,18):
 		

@@ -3,7 +3,6 @@ from numpy import *
 from math import *
 from scipy import interpolate
 import scipy
-from Numeric import *
 import os
 import getopt
 import sys
@@ -46,7 +45,7 @@ Options:
 
 
 def main(file,time):
-
+	seterr(all='ignore')
 # input files
 
 	inFile = open(file,"r")
@@ -56,7 +55,7 @@ def main(file,time):
 	lines2 = inFile2.readlines()	
 
 
-    	Data= zeros(((len(lines)-1),18), Float)
+    	Data= zeros(((len(lines)-1),18), float)
 
 
 
@@ -194,12 +193,12 @@ def main(file,time):
 
 		RotZ = array(((cos(ZRotationAngle),sin(ZRotationAngle),0),(-sin(ZRotationAngle),cos(ZRotationAngle),0),(0,0,1)))
 		
-		RShoulder2=matrixmultiply(RotZ,transpose(RShoulder1[A:B,:]))
-		RWing2=matrixmultiply(RotZ,transpose(RWing1[A:B,:]))
-		LShoulder2=matrixmultiply(RotZ,transpose(LShoulder1[A:B,:]))
-		LWing2=matrixmultiply(RotZ,transpose(LWing1[A:B,:]))
-		Head2=matrixmultiply(RotZ,transpose(Head1[A:B,:]))
-		Tail2=matrixmultiply(RotZ,transpose(Tail1[A:B,:]))
+		RShoulder2=dot(RotZ,transpose(RShoulder1[A:B,:]))
+		RWing2=dot(RotZ,transpose(RWing1[A:B,:]))
+		LShoulder2=dot(RotZ,transpose(LShoulder1[A:B,:]))
+		LWing2=dot(RotZ,transpose(LWing1[A:B,:]))
+		Head2=dot(RotZ,transpose(Head1[A:B,:]))
+		Tail2=dot(RotZ,transpose(Tail1[A:B,:]))
 
 		RShoulder3=transpose(RShoulder2)
 		RWing3=transpose(RWing2)
@@ -278,8 +277,8 @@ def main(file,time):
 
 	BodyXYZ=Head-Tail
 
-	BodyXZ= zeros(((len(Body)),3), Float)
-	BodyYZ= zeros(((len(Body)),3), Float)		
+	BodyXZ= zeros(((len(Body)),3), float)
+	BodyYZ= zeros(((len(Body)),3), float)		
 	
 	BodyXZ[:,0]=BodyXYZ[:,0]
 	BodyXZ[:,1]=0
@@ -293,7 +292,7 @@ def main(file,time):
 
 
 
-	BodyAngleXZ= zeros(((len(Body)),1), Float)	
+	BodyAngleXZ= zeros(((len(Body)),1), float)	
 
 
 	for n in range(len(Body)):
@@ -312,7 +311,7 @@ def main(file,time):
 
 	LengthBodyYZ=sqrt((BodyXYZ[:,1]**2)+(BodyXYZ[:,2]**2))
 
-	BodyAngleYZ= zeros(((len(Body)),1), Float)	
+	BodyAngleYZ= zeros(((len(Body)),1), float)	
 
 
 	for n in range(len(Body)):
@@ -503,12 +502,12 @@ def main(file,time):
 		# Rotate around Y axis,
 
 
-		RShoulder2=transpose(matrixmultiply(RotStrokeAngle,transpose(RShoulder)))
-		RWing2=transpose(matrixmultiply(RotStrokeAngle,transpose(RWing)))
-		LShoulder2=transpose(matrixmultiply(RotStrokeAngle,transpose(LShoulder)))
-		LWing2=transpose(matrixmultiply(RotStrokeAngle,transpose(LWing)))
-		Head2=transpose(matrixmultiply(RotStrokeAngle,transpose(Head)))
-		Tail2=transpose(matrixmultiply(RotStrokeAngle,transpose(Tail)))
+		RShoulder2=transpose(dot(RotStrokeAngle,transpose(RShoulder)))
+		RWing2=transpose(dot(RotStrokeAngle,transpose(RWing)))
+		LShoulder2=transpose(dot(RotStrokeAngle,transpose(LShoulder)))
+		LWing2=transpose(dot(RotStrokeAngle,transpose(LWing)))
+		Head2=transpose(dot(RotStrokeAngle,transpose(Head)))
+		Tail2=transpose(dot(RotStrokeAngle,transpose(Tail)))
 
 
 
