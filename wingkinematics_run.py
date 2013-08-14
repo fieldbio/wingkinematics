@@ -5,16 +5,13 @@ import getopt
 import sys
 
 
-def main(file):
+def main(file, filterfactor, prosup):
 
-	system("rm -rf angle_figures/ average_graphs/ wingbeat_figures/ wingbeat_timecourse/")
-
-
-	system("wingkinematics_filter.py %s ../../filterfactor.csv"% (file))
+	system("python wingkinematics_filter.py %s %s"% (file,filterfactor))
 	
-	system("wingkinematics_upsample_v1.0.py %s 0*"% (file[:-4]+"_filt.csv"))
+	system("python wingkinematics_upsample_v1.0.py %s %s"% (file[:-4]+"_filt.csv",prosup))
 
-	system("wingkinematics_v5.3.py %s %s"% ((file[:-4]+"_filt_upsampled.csv"),(file[:-4]+"_filt_pron_sup_NEW.csv")))	
+	system("python wingkinematics_v5.3.py %s %s"% ((file[:-4]+"_filt_upsampled.csv"),(file[:-4]+"_filt_pron_sup_NEW.csv")))	
 
 
 ######################################################################################################################################################
@@ -37,8 +34,8 @@ if __name__ == '__main__':
         	if o in ('-h', '--help'):
         		usage(error=0)
 
-    	if len(args) != 1:
+    	if len(args) != 3:
         	usage()
 
-    	main(args[0])
+    	main(args[0],args[1],args[2])
 
