@@ -77,14 +77,14 @@ def main(file,time):
 		
 
 # Make directory for figures
-	os.mkdir(path+"/wingbeat_figures")
-	os.mkdir(path+"/angle_figures")
-	os.mkdir(path+"/wingbeat_timecourse")
-	os.mkdir(path+"/wingbeat_timecourse/PosElev_SP")
-	os.mkdir(path+"/wingbeat_timecourse/PosElev_SP/Graphs")
-	os.mkdir(path+"/wingbeat_timecourse/PosElev_GR")
-	os.mkdir(path+"/wingbeat_timecourse/PosElev_GR/Graphs")
-	os.mkdir(path+"/average_graphs")
+	os.system("mkdir %s"%(path+"/wingbeat_figures"))
+	os.system("mkdir %s"%(path+"/angle_figures"))
+	os.system("mkdir %s"%(path+"/wingbeat_timecourse"))
+	os.system("mkdir %s"%(path+"/wingbeat_timecourse/PosElev_SP"))
+	os.system("mkdir %s"%(path+"/wingbeat_timecourse/PosElev_SP/Graphs"))
+	os.system("mkdir %s"%(path+"/wingbeat_timecourse/PosElev_GR"))
+	os.system("mkdir %s"%(path+"/wingbeat_timecourse/PosElev_GR/Graphs"))
+	os.system("mkdir %s"%(path+"/average_graphs"))
 # Define Output Arrays
 
 
@@ -238,31 +238,9 @@ def main(file,time):
 
 			Rotation_Angle_DS.append(90-Rotation_Angle[n])
 		
-#			if (Rotation_Angle[n+1]-Rotation_Angle[n])<-180:			
-			#	Rotation_Angle_DS.append(Rotation_Angle[n+1]-Rotation_Angle[n]+360)
-
-#			elif (Rotation_Angle[n+1]-Rotation_Angle[n])>180:
-#				Rotation_Angle_DS.append(Rotation_Angle[n+1]-Rotation_Angle[n]-360)
-
-#			else:
-#				Rotation_Angle_DS.append(Rotation_Angle[n+1]-Rotation_Angle[n])
-
-
-
 	 	else:	
 
-			Rotation_Angle_US.append(90-Rotation_Angle[n])
-
-#			if (Rotation_Angle[n+1]-Rotation_Angle[n])<-180:			
-#				Rotation_Angle_US.append(Rotation_Angle[n+1]-Rotation_Angle[n]+360)
-
-#			elif (Rotation_Angle[n+1]-Rotation_Angle[n])>180:
-#				Rotation_Angle_US.append(Rotation_Angle[n+1]-Rotation_Angle[n]-360)
-
-#			else:
-#				Rotation_Angle_US.append(Rotation_Angle[n+1]-Rotation_Angle[n])	
-		
-
+			Rotation_Angle_US.append(90-Rotation_Angle[n])		
 				
 
 	for n in range(1,(len(Time_Wingbeat))):
@@ -675,6 +653,10 @@ def main(file,time):
 	Body_Angle_DS=['Body_Angle']
 	Body_Angle_YZ_DS=['Body_Angle_YZ']
 
+	Translation_X_DS=['Translation_X_DS']
+	Translation_Y_DS=['Translation_Y_DS']
+	Translation_Z_DS=['Translation_Z_DS']
+
 	SA_Right_DS=['SA_Right_DS']
 	SA_Left_DS=['SA_Left_DS']
 
@@ -695,6 +677,10 @@ def main(file,time):
 	
 	Body_Angle_US=['Body_Angle']
 	Body_Angle_YZ_US=['Body_Angle_YZ']
+
+	Translation_X_US=['Translation_X_US']
+	Translation_Y_US=['Translation_Y_US']
+	Translation_Z_US=['Translation_Z_US']
 
 	SA_Right_US=['SA_Right_US']
 	SA_Left_US=['SA_Left_US']
@@ -768,6 +754,9 @@ def main(file,time):
 	
 			Body_Angle_DS.append(average(Output[(U[n]-1):(U[n+1]-1),0]))
 			Body_Angle_YZ_DS.append(average(Output[(U[n]-1):(U[n+1]-1),1]))
+			Translation_X_DS.append(HEAD[(U[n+1]-1),0]-HEAD[(U[n]-1),0])
+			Translation_Y_DS.append(HEAD[(U[n+1]-1),1]-HEAD[(U[n]-1),1])
+			Translation_Z_DS.append(HEAD[(U[n+1]-1),2]-HEAD[(U[n]-1),2])
 
 			SA_Right_DS.append(Output[U[n]-1,2])
 			SA_Left_DS.append(Output[U[n]-1,8])
@@ -793,6 +782,10 @@ def main(file,time):
 
 			Body_Angle_US.append(average(Output[(U[n]-1):(U[n+1]-1),0]))
 			Body_Angle_YZ_US.append(average(Output[(U[n]-1):(U[n+1]-1),1]))
+			Translation_X_US.append(HEAD[(U[n+1]-1),0]-HEAD[(U[n]-1),0])
+			Translation_Y_US.append(HEAD[(U[n+1]-1),1]-HEAD[(U[n]-1),1])
+			Translation_Z_US.append(HEAD[(U[n+1]-1),2]-HEAD[(U[n]-1),2])
+
 
 			SA_Right_US.append(Output[U[n]-1,2])
 			SA_Left_US.append(Output[U[n]-1,8])
@@ -825,7 +818,7 @@ def main(file,time):
 	FrameMult=10
 	#############
 
-	Output2 = zeros((len(Body_Angle_DS)-1,34))
+	Output2 = zeros((len(Body_Angle_DS)-1,42))
 
 	Output2[:,0] = Number[1:]
 	Output2[:,1] = Time_DS[1:]
@@ -866,13 +859,29 @@ def main(file,time):
 	Output2[:,32] = L_Wingtip_Dist_Trav_US[1:]
 	Output2[:,33] = (FrameMult*Output2[:,32]/Output2[:,18])
 
+	Output2[:,34] = Translation_X_DS[1:]
+	Output2[:,34] = (FrameMult*Output2[:,34]/Output2[:,1])
+	Output2[:,35] = Translation_Y_DS[1:]
+	Output2[:,35] = (FrameMult*Output2[:,35]/Output2[:,1])
+	Output2[:,36] = Translation_Z_DS[1:]
+	Output2[:,36] = (FrameMult*Output2[:,36]/Output2[:,1])
+	Output2[:,37] = sqrt(Output2[:,34]**2+Output2[:,35]**2+Output2[:,36]**2)
+
+	Output2[:,38] = Translation_X_US[1:]
+	Output2[:,38] = (FrameMult*Output2[:,37]/Output2[:,18])
+	Output2[:,39] = Translation_Y_US[1:]
+	Output2[:,39] = (FrameMult*Output2[:,38]/Output2[:,18])
+	Output2[:,40] =	Translation_Z_US[1:]
+	Output2[:,40] = (FrameMult*Output2[:,39]/Output2[:,18])
+	Output2[:,41] = sqrt(Output2[:,38]**2+Output2[:,39]**2+Output2[:,40]**2)
+
 
 #write to file
 
 
 
 	Writer = csv.writer(open(path+"/Angles_Summary_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
-	Writer.writerow(["Wingbeat#","Wingbeat_Length_DS", "Travel_Angle_DS", "Body_Angle_Lateral_DS","Body_Angle_Dorsal_DS","R_Stroke_Plane_Angle_DS","L_Stroke_Plane_Angle_DS","R_Avg_Elevation_Angle_Ground_DS","L_Avg_Elevation_Angle_Ground_DS", "R_Amplitude_Stroke_Plane_DS","L_Amplitude_Stroke_Plane_DS","R_Wing_Elevation_Amplitude_Stroke_Plane_DS","L_Wing_Elevation_Amplitude_Stroke_Plane_DS","R_Wingtip_Dist_Traveled_DS(mm)","R_Wingtip_Velocity_DS","L_Wingtip_Dist_Traveled_DS(mm)","L_Wingtip_Velocity_DS","Wingbeat#","Wingbeat_Length_US", "Travel_Angle_US", "Body_Angle_Lateral_US","Body_Angle_Dorsal_US","R_Stroke_Plane_Angle_US","L_Stroke_Plane_Angle_US","R_Avg_Elevation_Angle_Ground_US","L_Avg_Elevation_Angle_Ground_US", "R_Amplitude_Stroke_Plane_US","L_Amplitude_Stroke_Plane_US","R_Wing_Elevation_Amplitude_Stroke_Plane_US","L_Wing_Elevation_Amplitude_Stroke_Plane_US","R_Wingtip_Dist_Traveled_US","R_Wingtip_Velocity_US","L_Wingtip_Dist_Traveled_US","L_Wingtip_Velocity_US"])
+	Writer.writerow(["Wingbeat#","Wingbeat_Length_DS", "Travel_Angle_DS", "Body_Angle_Lateral_DS","Body_Angle_Dorsal_DS","R_Stroke_Plane_Angle_DS","L_Stroke_Plane_Angle_DS","R_Avg_Elevation_Angle_Ground_DS","L_Avg_Elevation_Angle_Ground_DS", "R_Amplitude_Stroke_Plane_DS","L_Amplitude_Stroke_Plane_DS","R_Wing_Elevation_Amplitude_Stroke_Plane_DS","L_Wing_Elevation_Amplitude_Stroke_Plane_DS","R_Wingtip_Dist_Traveled_DS(mm)","R_Wingtip_Velocity_DS","L_Wingtip_Dist_Traveled_DS(mm)","L_Wingtip_Velocity_DS","Wingbeat#","Wingbeat_Length_US", "Travel_Angle_US", "Body_Angle_Lateral_US","Body_Angle_Dorsal_US","R_Stroke_Plane_Angle_US","L_Stroke_Plane_Angle_US","R_Avg_Elevation_Angle_Ground_US","L_Avg_Elevation_Angle_Ground_US", "R_Amplitude_Stroke_Plane_US","L_Amplitude_Stroke_Plane_US","R_Wing_Elevation_Amplitude_Stroke_Plane_US","L_Wing_Elevation_Amplitude_Stroke_Plane_US","R_Wingtip_Dist_Traveled_US","R_Wingtip_Velocity_US","L_Wingtip_Dist_Traveled_US","L_Wingtip_Velocity_US","X_vel_DS","Y_vel_DS","Z_vel_DS","Total_vel_DS","X_vel_US","Y_vel_US","Z_vel_US","Total_vel_US"])
 
 	for N in range(len(Body_Angle_DS)-1):
 		Writer.writerow(Output2[N])
