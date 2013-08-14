@@ -868,11 +868,11 @@ def main(file,time):
 	Output2[:,37] = sqrt(Output2[:,34]**2+Output2[:,35]**2+Output2[:,36]**2)
 
 	Output2[:,38] = Translation_X_US[1:]
-	Output2[:,38] = (FrameMult*Output2[:,37]/Output2[:,18])
+	Output2[:,38] = (FrameMult*Output2[:,38]/Output2[:,18])
 	Output2[:,39] = Translation_Y_US[1:]
-	Output2[:,39] = (FrameMult*Output2[:,38]/Output2[:,18])
+	Output2[:,39] = (FrameMult*Output2[:,39]/Output2[:,18])
 	Output2[:,40] =	Translation_Z_US[1:]
-	Output2[:,40] = (FrameMult*Output2[:,39]/Output2[:,18])
+	Output2[:,40] = (FrameMult*Output2[:,40]/Output2[:,18])
 	Output2[:,41] = sqrt(Output2[:,38]**2+Output2[:,39]**2+Output2[:,40]**2)
 
 
