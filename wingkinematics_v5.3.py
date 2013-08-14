@@ -46,6 +46,8 @@ Options:
 
 def main(file,time):
 	seterr(all='ignore')
+	(path, filename) = os.path.split(file)
+
 # input files
 
 	inFile = open(file,"r")
@@ -75,14 +77,14 @@ def main(file,time):
 		
 
 # Make directory for figures
-	os.mkdir("wingbeat_figures")
-	os.mkdir("angle_figures")
-	os.mkdir("wingbeat_timecourse")
-	os.mkdir("wingbeat_timecourse/PosElev_SP")
-	os.mkdir("wingbeat_timecourse/PosElev_SP/Graphs")
-	os.mkdir("wingbeat_timecourse/PosElev_GR")
-	os.mkdir("wingbeat_timecourse/PosElev_GR/Graphs")
-	os.mkdir("average_graphs")
+	os.mkdir(path+"/wingbeat_figures")
+	os.mkdir(path+"/angle_figures")
+	os.mkdir(path+"/wingbeat_timecourse")
+	os.mkdir(path+"/wingbeat_timecourse/PosElev_SP")
+	os.mkdir(path+"/wingbeat_timecourse/PosElev_SP/Graphs")
+	os.mkdir(path+"/wingbeat_timecourse/PosElev_GR")
+	os.mkdir(path+"/wingbeat_timecourse/PosElev_GR/Graphs")
+	os.mkdir(path+"/average_graphs")
 # Define Output Arrays
 
 
@@ -340,7 +342,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('true_global_XY_'+file[:-4]+'.svg')
+	savefig(path+'/true_global_XY_'+filename[:-4]+'.svg')
 
 ###########################################################
 
@@ -358,7 +360,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('XZ_global_'+file[:-4]+'.svg')
+	savefig(path+'/XZ_global_'+filename[:-4]+'.svg')
 
 
 	clf()
@@ -372,7 +374,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('YZ_global_'+file[:-4]+'.svg')
+	savefig(path+'/YZ_global_'+filename[:-4]+'.svg')
 
 	clf()
 	plot(LWing[U[0]:U[-1],0],LWing[U[0]:U[-1],1],c='r')
@@ -387,11 +389,11 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('XY_global_'+file[:-4]+'.svg')
+	savefig(path+'/XY_global_'+filename[:-4]+'.svg')
 
 
 #	Write Transformed Coordinates
-	Writer = csv.writer(open("trans_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/trans_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(['RShoulder_X','RShoulder_Y','RShoulder_Z','RWing_X','RWing_Y','RWing_Z','LShoulder_X','LShoulder_Y','LShoulder_Z','LWing_X', 'LWing_Y','LWing_Z','Head_X','Head_Y','Head_Z','Tail_X','Tail_Y','Tail_Z'])
 	for N in range(0,U[len(U)-1]-1):
 		Writer.writerow(Transformed[N])
@@ -634,7 +636,7 @@ def main(file,time):
 		axes().set_aspect('equal', 'datalim')
 		grid(True)
 #		show()
-		savefig("wingbeat_figures/"+Q+".svg")
+		savefig(path+"/wingbeat_figures/"+Q+".svg")
 
 
 
@@ -722,9 +724,9 @@ def main(file,time):
 	
 # right wing		
 		if n%2==0:
-			Q = 'Down_'+str(n+1)+'_'+file[:-4]+'_Right'
+			Q = 'Down_'+str(n+1)+'_'+filename[:-4]+'_Right'
 		else:
-			Q = 'Up_'+str(n+1)+'_'+file[:-4]+'_Right'
+			Q = 'Up_'+str(n+1)+'_'+filename[:-4]+'_Right'
 
 		StrokeAngle((U[n]-1),(U[n+1]-1),1)
 
@@ -741,9 +743,9 @@ def main(file,time):
 
 # left wing
 		if n%2==0:
-			Q = 'Down_'+str(n+1)+'_'+file[:-4]+'_Left'
+			Q = 'Down_'+str(n+1)+'_'+filename[:-4]+'_Left'
 		else:
-			Q = 'Up_'+str(n+1)+'_'+file[:-4]+'_Left'
+			Q = 'Up_'+str(n+1)+'_'+filename[:-4]+'_Left'
 
 		StrokeAngle((U[n]-1),(U[n+1]-1),2)
 			
@@ -812,7 +814,7 @@ def main(file,time):
 
 ############################################################################################################################	
 
-	Writer = csv.writer(open("Angles_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/Angles_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(['Body_Angle_lateral','Body_Angle_dorsal','R_Stroke_Plane_Angle', 'R_Position_Angle_Ground','R_Elevation_Angle_Ground','R_Position_Angle_Stroke_Plane','R_Elevation_Angle_Stroke_Plane','R_Wingtip_Distance_Traveled(mm)','L_Stroke_Plane_Angle', 'L_Position_Angle_Ground','L_Elevation_Angle_Ground','L_Position_Angle_Stroke_Plane','L_Elevation_Angle_Stroke_Plane','L_Wingtip_Distance_Traveled(mm)'])
 	for N in range(0,U[len(U)-1]-1):
 		Writer.writerow(Output[N])
@@ -869,7 +871,7 @@ def main(file,time):
 
 
 
-	Writer = csv.writer(open("Angles_Summary_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/Angles_Summary_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(["Wingbeat#","Wingbeat_Length_DS", "Travel_Angle_DS", "Body_Angle_Lateral_DS","Body_Angle_Dorsal_DS","R_Stroke_Plane_Angle_DS","L_Stroke_Plane_Angle_DS","R_Avg_Elevation_Angle_Ground_DS","L_Avg_Elevation_Angle_Ground_DS", "R_Amplitude_Stroke_Plane_DS","L_Amplitude_Stroke_Plane_DS","R_Wing_Elevation_Amplitude_Stroke_Plane_DS","L_Wing_Elevation_Amplitude_Stroke_Plane_DS","R_Wingtip_Dist_Traveled_DS(mm)","R_Wingtip_Velocity_DS","L_Wingtip_Dist_Traveled_DS(mm)","L_Wingtip_Velocity_DS","Wingbeat#","Wingbeat_Length_US", "Travel_Angle_US", "Body_Angle_Lateral_US","Body_Angle_Dorsal_US","R_Stroke_Plane_Angle_US","L_Stroke_Plane_Angle_US","R_Avg_Elevation_Angle_Ground_US","L_Avg_Elevation_Angle_Ground_US", "R_Amplitude_Stroke_Plane_US","L_Amplitude_Stroke_Plane_US","R_Wing_Elevation_Amplitude_Stroke_Plane_US","L_Wing_Elevation_Amplitude_Stroke_Plane_US","R_Wingtip_Dist_Traveled_US","R_Wingtip_Velocity_US","L_Wingtip_Dist_Traveled_US","L_Wingtip_Velocity_US"])
 
 	for N in range(len(Body_Angle_DS)-1):
@@ -909,7 +911,7 @@ def main(file,time):
 	Output3[:,21] = Output2[:,33]-Output2[:,31]
 
 
-	Writer = csv.writer(open("Angles_Summary_LeftMinusRight_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/Angles_Summary_LeftMinusRight_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(["Wingbeat#","Wingbeat_Length_DS", "Travel_Angle_DS", "Body_Angle_Lateral_DS","Body_Angle_Dorsal_DS","Stroke_Plane_Angle_DS","Avg_Elevation_Angle_Ground_DS", "Amplitude_Stroke_Plane_DS","Wing_Elevation_Amplitude_Stroke_Plane_DS","Wingtip_Dist_Traveled_DS(mm)","Wingtip_Velocity_DS","Wingbeat#","Wingbeat_Length_US", "Travel_Angle_US", "Body_Angle_Lateral_US","Body_Angle_Dorsal_US","Stroke_Plane_Angle_US","Avg_Elevation_Angle_Ground_US", "Amplitude_Stroke_Plane_US","Wing_Elevation_Amplitude_Stroke_Plane_US","Wingtip_Dist_Traveled_US(mm)","Wingtip_Velocity_US"])
 	for N in range(len(Body_Angle_DS)-1):
 		Writer.writerow(Output3[N])
@@ -924,7 +926,7 @@ def main(file,time):
 	grid(True)
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
-	savefig("angle_figures/1_Travel_Angle_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/1_Travel_Angle_"+filename[:-4]+".svg")
 
 
 
@@ -934,7 +936,7 @@ def main(file,time):
 	grid(True)
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(0,90)
-	savefig("angle_figures/2_Body_Angle_Lateral_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/2_Body_Angle_Lateral_"+filename[:-4]+".svg")
 
 
 	clf()
@@ -943,7 +945,7 @@ def main(file,time):
 	grid(True)
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
-	savefig("angle_figures/3_Body_Angle_Dorsal_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/3_Body_Angle_Dorsal_"+filename[:-4]+".svg")
 
 
 	clf()
@@ -968,7 +970,7 @@ def main(file,time):
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
 
-	savefig("angle_figures/4_Stroke_Angle_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/4_Stroke_Angle_"+filename[:-4]+".svg")
 
 
 
@@ -993,7 +995,7 @@ def main(file,time):
 	grid(True)
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
-	savefig("angle_figures/5_Avg_Elevation_Angle_Ground_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/5_Avg_Elevation_Angle_Ground_"+filename[:-4]+".svg")
 
 
 	clf()
@@ -1017,7 +1019,7 @@ def main(file,time):
 	grid(True)
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
-	savefig("angle_figures/6_Amplitude_SP_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/6_Amplitude_SP_"+filename[:-4]+".svg")
 
 
 
@@ -1043,7 +1045,7 @@ def main(file,time):
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
 
-	savefig("angle_figures/7_Elevation_Amplitude_SP_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/7_Elevation_Amplitude_SP_"+filename[:-4]+".svg")
 
 
 
@@ -1070,7 +1072,7 @@ def main(file,time):
 	xlim(0.5,len(Body_Angle_DS))
 	ylim(-10,10)
 
-	savefig("angle_figures/8_Wingtip_Velocity_"+file[:-4]+".svg")
+	savefig(path+"/angle_figures/8_Wingtip_Velocity_"+filename[:-4]+".svg")
 
 	
 
@@ -1476,12 +1478,12 @@ def main(file,time):
 
 	AvgWingbeatStEr = column_stack((RShoulder_Avg_DS_X[:,2], RShoulder_Avg_DS_Y[:,2], RShoulder_Avg_DS_Z[:,2], RWing_Avg_DS_X[:,2], RWing_Avg_DS_Y[:,2], RWing_Avg_DS_Z[:,2],LShoulder_Avg_DS_X[:,2],LShoulder_Avg_DS_Y[:,2],LShoulder_Avg_DS_Z[:,2], LWing_Avg_DS_X[:,2], LWing_Avg_DS_Y[:,2], LWing_Avg_DS_Z[:,2],Head_Avg_DS_X[:,2],Head_Avg_DS_Y[:,2],Head_Avg_DS_Z[:,2], Tail_Avg_DS_X[:,2], Tail_Avg_DS_Y[:,2], Tail_Avg_DS_Z[:,2],RShoulder_Avg_US_X[:,2], RShoulder_Avg_US_Y[:,2], RShoulder_Avg_US_Z[:,2], RWing_Avg_US_X[:,2], RWing_Avg_US_Y[:,2], RWing_Avg_US_Z[:,2],LShoulder_Avg_US_X[:,2],LShoulder_Avg_US_Y[:,2],LShoulder_Avg_US_Z[:,2], LWing_Avg_US_X[:,2], LWing_Avg_US_Y[:,2], LWing_Avg_US_Z[:,2],Head_Avg_US_X[:,2],Head_Avg_US_Y[:,2],Head_Avg_US_Z[:,2], Tail_Avg_US_X[:,2], Tail_Avg_US_Y[:,2], Tail_Avg_US_Z[:,2]))
 
-	Writer = csv.writer(open("average_graphs/WingbeatAverage_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/average_graphs/WingbeatAverage_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(['RShoulder_DS_X','RShoulder_DS_Y','RShoulder_DS_Z','RWing_DS_X','RWing_DS_Y','RWing_DS_Z','LShoulder_DS_X','LShoulder_DS_Y','LShoulder_DS_Z','LWing_DS_X', 'LWing_DS_Y','LWing_DS_Z','Head_DS_X','Head_DS_Y','Head_DS_Z','Tail_DS_X','Tail_DS_Y','Tail_DS_Z','RShoulder_US_X','RShoulder_US_Y','RShoulder_US_Z','RWing_US_X','RWing_US_Y','RWing_US_Z','LShoulder_US_X','LShoulder_US_Y','LShoulder_US_Z','LWing_US_X', 'LWing_US_Y','LWing_US_Z','Head_US_X','Head_US_Y','Head_US_Z','Tail_US_X','Tail_US_Y','Tail_US_Z'])
 	for N in range(0,100):
 		Writer.writerow(AvgWingbeat[N])
 
-	Writer = csv.writer(open("average_graphs/WingbeatAvgStErr_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/average_graphs/WingbeatAvgStErr_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(['RShoulder_DS_X','RShoulder_DS_Y','RShoulder_DS_Z','RWing_DS_X','RWing_DS_Y','RWing_DS_Z','LShoulder_DS_X','LShoulder_DS_Y','LShoulder_DS_Z','LWing_DS_X', 'LWing_DS_Y','LWing_DS_Z','Head_DS_X','Head_DS_Y','Head_DS_Z','Tail_DS_X','Tail_DS_Y','Tail_DS_Z','RShoulder_US_X','RShoulder_US_Y','RShoulder_US_Z','RWing_US_X','RWing_US_Y','RWing_US_Z','LShoulder_US_X','LShoulder_US_Y','LShoulder_US_Z','LWing_US_X', 'LWing_US_Y','LWing_US_Z','Head_US_X','Head_US_Y','Head_US_Z','Tail_US_X','Tail_US_Y','Tail_US_Z'])
 	for N in range(0,100):
 		Writer.writerow(AvgWingbeatStEr[N])
@@ -1513,7 +1515,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('average_graphs/XZ_avg_'+file[:-4]+'.svg')
+	savefig(path+'/average_graphs/XZ_avg_'+filename[:-4]+'.svg')
 
 
 	clf()
@@ -1539,7 +1541,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('average_graphs/YZ_avg_'+file[:-4]+'.svg')
+	savefig(path+'/average_graphs/YZ_avg_'+filename[:-4]+'.svg')
 
 
 
@@ -1568,7 +1570,7 @@ def main(file,time):
 	axes().set_aspect('equal', 'datalim')
 	grid(True)
 #	show()	
-	savefig('average_graphs/XY_avg_'+file[:-4]+'.svg')
+	savefig(path+'/average_graphs/XY_avg_'+filename[:-4]+'.svg')
 
 
 
@@ -1714,14 +1716,14 @@ def main(file,time):
 	scatter(LDeviation_SP[:,0],LDeviation_SP[:,1],c='r')
 	axis((0,200,-45,45))
 
-	savefig('wingbeat_timecourse/PosElev_SP/LRElevation_SP_'+file[:-4])
+	savefig(path+'/wingbeat_timecourse/PosElev_SP/LRElevation_SP_'+filename[:-4])
 #	show()
 
 	clf()
 	scatter(RPosition_SP[:,0],RPosition_SP[:,1],c='b')
 	scatter(LPosition_SP[:,0],LPosition_SP[:,1],c='r')
 	axis((0,200,-10,190))
-	savefig('wingbeat_timecourse/PosElev_SP/LRPosition_SP_'+file[:-4])
+	savefig(path+'/wingbeat_timecourse/PosElev_SP/LRPosition_SP_'+filename[:-4])
 #	show()
 
 
@@ -1732,13 +1734,13 @@ def main(file,time):
 		scatter(RDeviation_SP[:,0],RDeviation_SP[:,n],c='b')
 		scatter(LDeviation_SP[:,0],LDeviation_SP[:,n],c='r')
 		axis((0,200,-45,45))
-		savefig('wingbeat_timecourse/PosElev_SP/Graphs/LRElevation_SP_'+str(n-2)+"_"+file[:-4])
+		savefig(path+'/wingbeat_timecourse/PosElev_SP/Graphs/LRElevation_SP_'+str(n-2)+"_"+filename[:-4])
 
 		clf()
 		scatter(RPosition_SP[:,0],RPosition_SP[:,n],c='b')
 		scatter(LPosition_SP[:,0],LPosition_SP[:,n],c='r')
 		axis((0,200,-10,190))
-		savefig('wingbeat_timecourse/PosElev_SP/Graphs/LRPosition_SP_'+str(n-2)+"_"+file[:-4])
+		savefig(path+'/wingbeat_timecourse/PosElev_SP/Graphs/LRPosition_SP_'+str(n-2)+"_"+filename[:-4])
 
 
 
@@ -1750,22 +1752,22 @@ def main(file,time):
 		header.append(n-2)
 
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_SP/RPosition_SP_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_SP/RPosition_SP_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(RPosition_SP[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_SP/RElevation_SP_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_SP/RElevation_SP_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(RDeviation_SP[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_SP/LPosition_SP_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_SP/LPosition_SP_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(LPosition_SP[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_SP/LElevation_SP_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_SP/LElevation_SP_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(LDeviation_SP[N])
@@ -1787,7 +1789,7 @@ def main(file,time):
 	LRPosElev_SP_Summary[:,7]=RDeviation_SP_US[:,2]
 	
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_SP/Summary_LRPosElev_SP_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_SP/Summary_LRPosElev_SP_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(["Left_Downstroke_Avg","Left_Downstroke_StErr","Left_Upstroke_Avg","Left_Upstroke_StErr","Right_Downstroke_Avg","Right_Downstroke_StErr","Right_Upstroke_Avg","Right_Upstroke_StErr"])
 	for N in range(0,100):
 		Writer.writerow(LRPosElev_SP_Summary[N])
@@ -1909,14 +1911,14 @@ def main(file,time):
 	scatter(LDeviation_GR[:,0],LDeviation_GR[:,1],c='r')
 	axis((0,200,-45,45))
 
-	savefig('wingbeat_timecourse/PosElev_GR/LRElevation_GR_'+file[:-4])
+	savefig(path+'/wingbeat_timecourse/PosElev_GR/LRElevation_GR_'+filename[:-4])
 #	show()
 
 	clf()
 	scatter(RPosition_GR[:,0],RPosition_GR[:,1],c='b')
 	scatter(LPosition_GR[:,0],LPosition_GR[:,1],c='r')
 	axis((0,200,-10,190))
-	savefig('wingbeat_timecourse/PosElev_GR/LRPosition_GR_'+file[:-4])
+	savefig(path+'/wingbeat_timecourse/PosElev_GR/LRPosition_GR_'+filename[:-4])
 #	show()
 
 
@@ -1927,13 +1929,13 @@ def main(file,time):
 		scatter(RDeviation_GR[:,0],RDeviation_GR[:,n],c='b')
 		scatter(LDeviation_GR[:,0],LDeviation_GR[:,n],c='r')
 		axis((0,200,-45,45))
-		savefig('wingbeat_timecourse/PosElev_GR/Graphs/LRElevation_GR_'+str(n-2)+"_"+file[:-4])
+		savefig(path+'/wingbeat_timecourse/PosElev_GR/Graphs/LRElevation_GR_'+str(n-2)+"_"+filename[:-4])
 
 		clf()
 		scatter(RPosition_GR[:,0],RPosition_GR[:,n],c='b')
 		scatter(LPosition_GR[:,0],LPosition_GR[:,n],c='r')
 		axis((0,200,-10,190))
-		savefig('wingbeat_timecourse/PosElev_GR/Graphs/LRPosition_GR_'+str(n-2)+"_"+file[:-4])
+		savefig(path+'/wingbeat_timecourse/PosElev_GR/Graphs/LRPosition_GR_'+str(n-2)+"_"+filename[:-4])
 
 
 
@@ -1945,22 +1947,22 @@ def main(file,time):
 		header.append(n-2)
 
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_GR/RPosition_GR_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_GR/RPosition_GR_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(RPosition_GR[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_GR/RElevation_GR_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_GR/RElevation_GR_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(RDeviation_GR[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_GR/LPosition_GR_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_GR/LPosition_GR_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(LPosition_GR[N])
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_GR/LElevation_GR_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_GR/LElevation_GR_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(header)
 	for N in range(0,200):
 		Writer.writerow(LDeviation_GR[N])
@@ -1977,7 +1979,7 @@ def main(file,time):
 	LRPosElev_GR_Summary[:,7]=RDeviation_GR_US[:,2]
 	
 
-	Writer = csv.writer(open("wingbeat_timecourse/PosElev_GR/Summary_LRPosElev_GR_"+file, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
+	Writer = csv.writer(open(path+"/wingbeat_timecourse/PosElev_GR/Summary_LRPosElev_GR_"+filename, 'w'), delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 	Writer.writerow(["Left_Downstroke_Avg","Left_Downstroke_StErr","Left_Upstroke_Avg","Left_Upstroke_StErr","Right_Downstroke_Avg","Right_Downstroke_StErr","Right_Upstroke_Avg","Right_Upstroke_StErr"])
 	for N in range(0,100):
 		Writer.writerow(LRPosElev_GR_Summary[N])
